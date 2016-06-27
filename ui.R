@@ -1,143 +1,103 @@
 library(shiny)
 library(shinydashboard)
 
-# babla
-# Dashboard
-dashboardPage(
+# Dashboard UI
+shinyUI( dashboardPage( 
   skin = "green",
-  dashboardHeader(
-    title = "Ecodomia"
-  ),
-  dashboardSidebar(
-    sidebarMenu(
-      menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-      menuItem("Mon logement", tabName = "logement", icon = icon("home"))
-    )
-  ),
-  dashboardBody(
-    tags$head(
-      tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+    dashboardHeader(
+      title = "Ecodomia"
     ),
-    
-    tabItems(
-      tabItem(tabName = "logement",
-        fluidRow(
-          box(title = "Localisation", solidHeader = TRUE, status = "primary",
-              textInput("postcode", label = "Code postal"))
-        ),
-        fluidRow(
-          box(title = "Taille du logement", solidHeader = TRUE, status = "primary",
-              numericInput("surface", label = "Surface", value = 50))
-        )
-              
+    dashboardSidebar(
+      # Menu items of the sidebar menu panel
+      sidebarMenu(
+        menuItem("Mon logement", tabName = "logement", icon = icon("home")),
+        menuItem("Tableau de bord", tabName = "dashboard", icon = icon("dashboard"))
+      )
+    ),
+    dashboardBody(
+      # Generates HTML head tag to include CSS and Fonts
+      tags$head(
+        tags$link(rel = "stylesheet", type = "text/css", href = "custom.css"),
+        tags$link(href='https://fonts.googleapis.com/css?family=Raleway:400,700', rel='stylesheet', type='text/css')
       ),
-      tabItem(tabName = "dashboard")
-    )
-  )
-)
+      tabItems(
+        tabItem(tabName = "logement", # BEGIN FIRST TAB
+                fluidRow(
+                  box(title = "Localisation", solidHeader = TRUE, status = "success",
+                      numericInput("postcode", label = "Code postal", value = 75015)
+                  )
+                ),
+                fluidRow(
+                  box(title = "Taille du logement", solidHeader = TRUE, status = "success",
+                      numericInput("surface", label = "Surface", value = 50)
+                  ),
+                  box(title = "Nombre de pièces", solidHeader = TRUE, status = "success",
+                      numericInput("rooms",label = "", value = 3)
+                  )
+                ),
+                fluidRow(
+                  box(title = "Hauteur de plafond", solidHeader = TRUE, status = "success",
+                      numericInput("height",label = "", value = 3)
+                  ),
+                  box(title = "Nombre d'étages", solidHeader = TRUE, status = "success",
+                      numericInput("floors",label = "", value = 5)
+                  )
+                ),
+                fluidRow(
+                  box(title = "Date de construction", solidHeader = TRUE, status = "success",
+                      radioButtons("construction", 
+                                   label = "", 
+                                   choices = c("Avant 1990" = TRUE,
+                                               "Après 1990" = FALSE))
+                  ),
+                  box(title = "Type de chauffage", solidHeader = TRUE, status = "success",
+                      radioButtons("heating",
+                                   label = "",
+                                   choices = c("Electricite" = "electricite",
+                                               "Gaz" = "gaz",
+                                               "Autre" = "autre"))
+                  )
+                )
+                
+        ), # END FIRST TAB
+        
+        tabItem(tabName = "dashboard", # BEGIN SECOND TAB
 
-# # First panel layout
-# overviewPanel = fluidPage(
-#   titlePanel("Overview"),
-#   fluidRow(
-#     column(4,selectInput("listTypes", 
-#                          label = "Choose which type of donation to show",
-#                          choices = c("ALL",
-#                                      distinctType),
-#                          selected = "ALL"),
-#            radioButtons("radioMeasure1", 
-#                          label = "Measure",
-#                          choices = list("Total amount" = 1,
-#                                         "Number of donors" = 2,
-#                                         "Total amount per donor" = 3)),
-#            sliderInput("periodobs1", "Periods to consider:",
-#                        min = 0, max = max(tabActType$period),
-#                        value = c(0,max(tabActType$period)),
-#                        step = 1)
-#            ),
-#     column(8, plotOutput("overviewActType"))
-#   ),
-#   fluidRow(
-#     column(4,selectInput("listChannels", 
-#                          label = "Choose which channel to show",
-#                          choices = c("ALL",
-#                                      distinctChannel),
-#                          selected = "ALL"),
-#            radioButtons("radioMeasure2", label = "Measure",
-#                         choices = list("Total Amount" = 1,
-#                                        "Number of donors" = 2,
-#                                        "Total amount per donor" = 3),
-#                         selected = 1),
-#            sliderInput("periodobs2", "Periods to consider:",
-#                        min = 0, max = max(tabPeriodsChannel$period),
-#                        value = c(0,max(tabPeriodsChannel$period)),
-#                        step = 1)
-#            ),
-#     column(8, plotOutput("overviewPeriodsChannel"))
-#   ),
-#   
-#   fluidRow(
-#     column(4, sliderInput("rankobs", "Number of donations to consider:",
-#                           min = 1, max = length(tabActRank$nbDonors), value = c(1,25),
-#                           step = 1),
-#            radioButtons("radioMeasure3", label = "Measure",
-#                         choices = list("Average Amount" = 1, 
-#                                        "Number of donors" = 2),
-#                         selected = 1)),
-#     column(8, plotOutput("overviewActRank"))
-#   )
-# )
-# 
-# #Second panel layout
-# panelDonors = fluidPage(
-#   titlePanel("Donors & Loyalty"),
-#   fluidRow(
-#   column(4,selectInput("listChannels2", 
-#                        label = "Choose which channel to show",
-#                        choices = c("ALL",
-#                                    distinctChannel),
-#                        selected = "ALL"),
-#          sliderInput("rankobs2", "Number of donations to consider:",
-#                      min = 2, max = max(tabRankLapse$ActRank), value = c(2,40),
-#                      step = 1)
-#   ),
-#   column(8, plotOutput("loyaltyRankLapse"))
-#   ),
-#   fluidRow(
-#   column(6, plotOutput("loyaltyChannelLapse"))  #A FIXER... ERROR SUR server.R
-#   )
-# )
-# 
-# #Third panel layout
-# panelGeo = fluidPage(
-#   titlePanel("Geographic"),
-#   fluidRow(
-#     column(2, radioButtons("deptvar", label = "Choose a variable to display",
-#                            choices = list("Average Amount" = "Avg_amount", 
-#                                           "Active Ratio" = "Active_ratio"))),
-#     column(6, plotOutput("geographic"))
-#   )
-# )
-# 
-# #Fourth panel layout
-# panelSurv = fluidPage(
-#   titlePanel("Survival Analysis"),
-#   fluidRow(
-#     column(12, plotOutput("survivalCurve"))
-#   ),
-#   fluidRow(
-#     column(12, tableOutput("survivalTable"))
-#   )
-# )
-# 
-# # Define navbar elements
-# shinyUI(navbarPage(title = "Executive Dashboard",
-#                    theme = "bootstrap.css",
-#                    position = "fixed-top",
-#                    inverse = TRUE,
-#                    collapsible = TRUE,
-#                    tabPanel("Overview", overviewPanel),
-#                    tabPanel("Donors", panelDonors),
-#                    tabPanel("Geographic", panelGeo),
-#                    tabPanel("Survival", panelSurv)
-# ))
+                fluidRow(
+                  column(width = 10, offset = 1,
+                         box(width = 12 , 
+                             
+                             fluidRow( column(width = 12, sliderInput("sliderMin", "Choisisez votre minimum et votre objectif de temperature:",
+                                                                      min = 15, max = 21, value = c(17,20)))),
+                             fluidRow(infoBoxOutput("progressBox" , width = 6),
+                                      infoBoxOutput("approvalBox" , width = 6)
+                             )
+                         )
+                  )
+                ),
+                
+                fluidRow(
+                  column(width = 6 , offset = 3, 
+                         valueBoxOutput("estimateBox", width = '100%')
+                  )
+                ),
+                
+                fluidRow(
+                  column(width = 10, offset = 1,
+                         box(
+                           checkboxInput("peak", label = tagList(shiny::icon("area-chart"), "Eviter les pics de consommation"), value = TRUE),
+                           valueBoxOutput("peakBox" , width = '100%')
+                         ),
+                         box(
+                           checkboxInput("green", label = tagList(shiny::icon("leaf"),"Favoriser l'energie verte"), value = TRUE),
+                           valueBoxOutput("energieBox" , width = '100%')
+                           
+                         )
+                  ))
+                
+        ) # END SECOND TAB
+        
+      ) # END TABS
+    ) # END BODY 
+  ) # END PAGE 
+) # END ShinyUI

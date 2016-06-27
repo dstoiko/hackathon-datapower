@@ -1,5 +1,28 @@
 .main-header .logo {
-  /*font-family: "Georgia", Times, "Times New Roman", serif;*/
-  /*font-weight: 400;*/
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
   font-size: 24px;
+}
+
+.irs-from, .irs-to, .irs-grid-text {
+  visibility: hidden !important;
+}
+
+.irs-bar {
+  border-top: 1px solid #00a65a;
+border-bottom: 1px solid #00a65a;
+background: #00a65a;
+}
+
+.rs-control .rs-range-color {
+    background-color: #00a65a;
+}
+.rs-control .rs-path-color {
+    background-color: #f7f7f7;
+}
+.rs-control .rs-handle {
+    background-color: #007540;
+}
+.rs-control .rs-bg-color {
+    background-color: #ffffff;
 }
